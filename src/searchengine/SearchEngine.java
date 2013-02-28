@@ -7,6 +7,7 @@ package searchengine;
 import com.its.util.IOMaster;
 import com.its.util.Stringer;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  *
@@ -36,13 +37,23 @@ public class SearchEngine {
         }
         
         //methods
-
         
         public String getPage() 
         {
                 return page;
         }
-
+        
+        //builds a string fron the results of a search
+        public String StringResults(List<String[]> results){
+            String returns = "";
+            for (int i = 0; i <  results.size(); i++){
+                for (String string : results.get(i)){
+                    returns += string+"\t\t";
+                }
+                returns += "\n\n";
+            }
+            return returns;
+        }
         
         public void setPage(String page) 
         {
@@ -59,6 +70,16 @@ public class SearchEngine {
         public void setKeywords(String keywords){
             words = Stringer.split(" ", keywords);
         }
+        
+        public void setKeyWordsWithInput()
+	{
+            	Scanner keyboard = new Scanner(System.in); 
+                String keywords;
+		System.out.println("Please enter your search criteria:");
+		keywords = keyboard.nextLine();
+		words = Stringer.split(" ", keywords);
+	}
+        
         public String formHtml(String[] headers, List<String[]> listOfSortedArrays) {
             String html = "<table class='results'><tr>";
             int numberOfCellsInTheText=headers.length;
@@ -77,10 +98,5 @@ public class SearchEngine {
             html+="</table>";
             return html;
         }
-        public void setKeywordsWithInput(String inputKeywords)
-	{
-		
-		
-	}
     
 }
