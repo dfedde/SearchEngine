@@ -19,10 +19,6 @@ public class SearchLinks extends SearchEngine {
                 super(url); 
         }
         
-        public SearchLinks()
-        {
-                
-        }
         public List<String[]> findLinks()
         {
             //define strings    
@@ -34,7 +30,7 @@ public class SearchLinks extends SearchEngine {
             links = Stringer.split("<a", getPage());
             
             // for every link in the array
-            for (String link : links) {    
+            for (String link : links) {
                     link = Parser.parseWithPatterns(link,"before,</a>");
                     /*
                      * get the URL
@@ -77,22 +73,24 @@ public class SearchLinks extends SearchEngine {
                      * get the score
                      */
                     	
-			//System.out.println(sentences[i]);
-			int counter = 0;
-			for (String word: words)
-			{
-				if(link.indexOf(word) >= 0) 
-				{
-					counter++;
-				}
-			}
-
-                        //cancatanate the values 
-                    
+                    //System.out.println(sentences[i]);
+                    int counter = 0;
+                    for (String word: words)
+                    {
+                            if(link.indexOf(word) >= 0) 
+                            {
+                                    counter++;
+                            }
+                    }
+                    //cancatanate the values 
+                    if(counter==0){
+                        break;
+                    }
+                    results.add(new String[]{desntanation, label, counter+""});
             }
-
             return results;
         }
+        
         //turns results into a string TODO
         public void resultsWriter()
         {
