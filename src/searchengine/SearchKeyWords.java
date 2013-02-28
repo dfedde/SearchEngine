@@ -14,9 +14,11 @@ public class SearchKeyWords extends SearchEngine
         public SearchKeyWords(String url) {
             super(url);
         }
-	
-	
-	
+
+    public SearchKeyWords(String url, String keywords) {
+        super(url, keywords);
+    }
+        
 	
 	public String[] getWords()
 	{
