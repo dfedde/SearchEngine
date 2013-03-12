@@ -17,6 +17,14 @@ public class SearchEngine {
     protected String page;
     private String url;
     protected String[] words;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
         
         
         //constructor
