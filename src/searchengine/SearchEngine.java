@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author duncan
  */
 public class SearchEngine {
-    private String page;
+    protected String page;
     private String url;
     protected String[] words;
         
@@ -44,7 +44,7 @@ public class SearchEngine {
         }
         
         //builds a string fron the results of a search
-        public String StringResults(List<String[]> results){
+        public static String StringResults(List<String[]> results){
             String returns = "";
             for (int i = 0; i <  results.size(); i++){
                 for (String string : results.get(i)){
@@ -80,6 +80,12 @@ public class SearchEngine {
 		words = Stringer.split(" ", keywords);
 	}
         
+        /**
+         * genarates a string based 2 arrays 
+         * @param the titles of the table 
+         * @param the content of the table  
+         * @return html string of a table
+         */
         public String formHtml(String[] headers, List<String[]> listOfSortedArrays) {
             String html = "<table class='results'><tr>";
             int numberOfCellsInTheText=headers.length;
