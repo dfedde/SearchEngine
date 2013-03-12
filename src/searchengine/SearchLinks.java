@@ -90,14 +90,31 @@ public class SearchLinks extends SearchEngine {
          continue; // do not read an image page 
        } 
        // read the page with the link  
-       readWebPage(); 
        if(!page.startsWith("ERROR:")) { // check if page was readable 
          findLinks(listOfLinks); // recursive call 
        } 
       } // end the for loop for all links 
       return listOfLinks;  
       } // end of the method 
-
+    
+    /**
+     * checks if the URL is a page
+     * @param url
+     * @return error code in the form of an integer
+     */
+    public static int checkLink(String url){
+        int errorCode = 0;
+        String LowerCaseUrl = url.toLowerCase();
+        if(LowerCaseUrl.endsWith(".jpg") || LowerCaseUrl.endsWith(".gif") || LowerCaseUrl.endsWith(".png")){
+            return 1;
+        }
+        if(url.indexOf(' ') > 0){
+            return 2;
+        }
+        if()
+        return errorCode;
+    }
+    
     public void resultsWriter() {
         System.out.println(findLinks(listOfLinks));
     }
