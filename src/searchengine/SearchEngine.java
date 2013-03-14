@@ -94,7 +94,7 @@ public class SearchEngine {
          * @param the content of the table  
          * @return html string of a table
          */
-        public String formHtml(String[] headers, List<String[]> listOfSortedArrays) {
+        public static String formHtml(String[] headers, List<String[]> listOfSortedArrays) {
             String html = "<table class='results'><tr>";
             int numberOfCellsInTheText=headers.length;
             for (int i=0;i<numberOfCellsInTheText;i++){
@@ -105,7 +105,7 @@ public class SearchEngine {
                 html += "<tr>";
                 String[] data = listOfSortedArrays.get(i);
                 for(int j=0;j<data.length;j++){
-                    html += "<td>"+data[i]+"</td>";
+                    html += "<td>"+data[j]+"</td>";
                 }
                 html+="</tr>";
             }
