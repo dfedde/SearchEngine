@@ -6,15 +6,20 @@ package searchengine;
 
 import com.its.util.IOMaster;
 import com.its.util.Stringer;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  *
  * @author duncan
  */
 public class SearchEngine {
-    protected String page;
+    protected Document page;
     private String url;
     protected String[] words;
 
@@ -44,9 +49,9 @@ public class SearchEngine {
                 url = "";
         }
         
-        //methods
+        //methodsd
         
-        public String getPage() 
+        public Document getPage() 
         {
                 return page;
         }
@@ -65,20 +70,40 @@ public class SearchEngine {
         
         public void setPage(String page) 
         {
-                this.page = page;
+            this.page = Jsoup.parse(page);
         }
         
-        
-        final public void readWebPage()
+        /**
+         * reads web page to a document 
+         */
+        final public boolean readWebPage()
         {
-                page = IOMaster.readTextFile(url);
-                
-                
+            // if the url is not emtey
+            if(!url.isEmpty()){
+                try {
+                // get a documet from to the webpage
+                    this.page = Jsoup.connect(url).get(); 
+                } catch (IOException ex) {
+                    Logger.getLogger(SearchEngine.class.getName()).log(Level.INFO, "could not conect to webpage", ex);
+                    return false;
+                }
+                //horay you read the web page
+                return true;
+            }
+            // it was emty
+            return false;
         }
+        /**
+         * parses space sprated keywords;
+         * @param keywords 
+         */
         public void setKeywords(String keywords){
             words = Stringer.split(" ", keywords);
         }
         
+        /**
+         * gets the keyword form imput separates on a space
+         */
         public void setKeyWordsWithInput()
 	{
             	Scanner keyboard = new Scanner(System.in); 
@@ -101,7 +126,7 @@ public class SearchEngine {
                 html+="<th>"+headers[i]+"</th>";
             }
             html+="</tr>";
-            for(int i=0; i<listOfSortedArrays.size();i++){
+            for(int i=0; i<listOfSortedArrays.size()-1;i++){
                 html += "<tr>";
                 String[] data = listOfSortedArrays.get(i);
                 for(int j=0;j<data.length;j++){
@@ -110,6 +135,18 @@ public class SearchEngine {
                 html+="</tr>";
             }
             html+="</table>";
+            return html;
+        }
+        public static String resultsToHtml(List<String[]> results){
+            String placeHolder = "<a herf='%s'>%s</a><br/><p>%s</p>";
+            String html = "<h1>Search Reasults</h1>";
+            html+="<ul>";
+            for(String[] result: results){
+                html += "<li>";
+                html += String.format(placeHolder, result[0], result[1], result[2]);
+                html+="</li>";
+            }
+            html+="</ul>";
             return html;
         }
     

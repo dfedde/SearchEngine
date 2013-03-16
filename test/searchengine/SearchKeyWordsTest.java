@@ -27,7 +27,7 @@ public class SearchKeyWordsTest {
     @Before
     public void setUp() {
         this.test = new SearchKeyWords("http://www.kbuxton.com/discordia/fnord.html");
-        this.test.setKeywords("fnord milkshake slurpee");
+        this.test.setKeywords("fnord");
         this.listOfLinks = new ArrayList();
         this.listOfLinks.add(new String[]{"http://www.kbuxton.com/discordia/song.html", "this link I found", "2"});
         this.listOfLinks.add(new String[]{"http://www.kbuxton.com/discordia/posting.html", "this link I found", "3"});

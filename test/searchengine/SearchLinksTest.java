@@ -4,13 +4,14 @@
  */
 package searchengine;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -36,7 +37,7 @@ public class SearchLinksTest {
                 "http://www.kbuxton.com/discordia/fnord.html"
                 );
         this.test.setKeywords(
-                "fnord milkshake slurpee"
+                ""
                 );
        
     }
@@ -54,17 +55,31 @@ public class SearchLinksTest {
         char counter;
         char previous = '0';
         System.out.println("findLinks");
-        List<String[]> results;
-        results = this.test.findLinks(this.test.getListOfLinks());
+        List<String[]> results = new ArrayList<>();
+        results = this.test.findLinks(results);
+        testOrder(results);
+        
+    }
+    
+    /**
+     * checks if the order of the array is corect
+     * @param array to check the order of 
+     */
+    private void testOrder(Iterable<String[]> results){
+        char counter;
+        char previous = 0;
         for (String[] result : results) {
-            counter = 0; 
+            counter = '0'; 
+            //for each of the relivens marker
             for (char ch : result[2].toCharArray()) {
                 assertTrue("the second value is not a number", Character.isDigit(ch));
+                // add togeter the nuber(leve it as a char) 
                 counter += ch;
             }
+            
             boolean flag = previous <= counter;
             assertTrue("the results are not in order", previous <= counter );
             previous = counter;
         }
-    }    
+    }
 }

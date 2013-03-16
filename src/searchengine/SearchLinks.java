@@ -4,10 +4,10 @@
  */
 package searchengine;
 
-import com.its.util.Parser;
-import com.its.util.Stringer;
 import java.util.ArrayList;
 import java.util.List;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -27,87 +27,37 @@ public class SearchLinks extends SearchEngine {
         super(url, keywords);
     }
 
-    public List<String[]> getListOfLinks() {
-        return listOfLinks;
-    }
-
-    public void setListOfLinks(List<String[]> listOfLinks) {
-        this.listOfLinks = listOfLinks;
-    }
 
     public List<String[]> findLinks(List<String[]> listOfLinks) {
         //define strings    
-        String[] links;
-        readWebPage();
-        
-        if(page.startsWith("ERROR:")) { 
-            return listOfLinks;
-        } 
+        Elements links;
+        // if you cant read the page dont bother trying to read it 
+        if(readWebPage()){
         
         //build an array out of the links in that page 
-        links = Stringer.split("<a", getPage());
+        links = page.select("a[href]");
 
         // for every link in the array
-        for (String link : links) {
-            link = Parser.parseWithPatterns(link, "before,</a>");
-            
-            /*
-             * get the URL
-             */
-
-
-            //get the index of the first carictor of the link destanation 
-            int destIndex;
-            if(link.indexOf("href=") >= 0) {
-                destIndex = link.indexOf("href=") + 5;
-            } else {
-                continue;
-            }
-            int destIndexEnd;// the last caricto of the destanation
-
+        for (Element link : links) {
             String desntanation;
-
-            //find the end of the string       
-            //find the witch is closer a space or a end dimond 
-            int space = link.indexOf(" ", destIndex);
-            int openDimond = link.indexOf(">", destIndex); 
-            
-            if (space < openDimond && space > 0){
-                destIndexEnd = space;
-            }else{
-                destIndexEnd = openDimond;
-            }
-            //if it has a qotation mark
-            if (link.charAt(destIndex) == '"' || link.charAt(destIndex) == '\'') {
-                desntanation = link.substring(destIndex + 1, destIndexEnd - 1);
-            } else {
-                desntanation = link.substring(destIndex, destIndexEnd);
-            }
-            System.out.print(desntanation+":  ");
-            /*
-             * get the lable 
-             */
-
-            //get the index of the first carictor of the link destanation 
-            int labelIndex = link.indexOf(">") + 1;
-            int labelIndexEnd; // the last caricto of the destanation
-
             String label;
-
-            //find the end of the string 
             
-            if(link.indexOf("<",labelIndex)<=0){
-                labelIndexEnd = link.length();
+            //get the link destonation try to convert relitive locations to absulute
+            desntanation = link.attr("abs:href");
+            System.out.print(desntanation+":  ");
+            
+            //if we already seached it
+            if(listOfUrls.contains(desntanation.toLowerCase())){
+                continue;
+            }else{
+                listOfUrls.add(desntanation.toLowerCase());
             }
-            else{
-                labelIndexEnd = link.indexOf("<", labelIndex);
-            }
-            label = link.substring(labelIndex, labelIndexEnd);
-            System.out.print(label+"\n");
-            /*
-             * get the score
-             */
-
+            
+            //get the lable
+            label = link.text();
+            System.out.print(label+": ");
+            
+            //get the score
             int counter = 0;
             for (String word : words) {
                 if (label.indexOf(word) >= 0) {
@@ -117,8 +67,9 @@ public class SearchLinks extends SearchEngine {
             if (counter == 0) {
                 continue;
             }
-             
-
+            System.out.println(counter);
+            
+            
             //cancatanate the values 
             listOfLinks.add(new String[]{desntanation,label,counter+""});
             
@@ -128,14 +79,18 @@ public class SearchLinks extends SearchEngine {
                 return listOfLinks; // enough links! we are done! 
             }
             
+            
+            
             if(desntanation.endsWith(".jpg") || desntanation.endsWith(".gif") ||    
                 desntanation.endsWith(".png")) { 
                 continue; // do not read an image page 
             }
-            if(!page.startsWith("ERROR:")) { // check if page was readable 
-                findLinks(listOfLinks); // recursive call 
-            } 
+            //TODO check if link is usabule 
+            
+            setUrl(desntanation);
+            findLinks(listOfLinks); // recursive call  
         }//endo of for loop
+        }
         return listOfLinks;
     } 
 
