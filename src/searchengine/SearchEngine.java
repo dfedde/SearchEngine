@@ -3,8 +3,8 @@
  * and open the template in the editor.
  */
 package searchengine;
-
-import com.its.util.IOMaster;
+/*---------------------------imports------------------------------------------*/
+//<editor-fold>
 import com.its.util.Stringer;
 import java.io.IOException;
 import java.util.List;
@@ -13,27 +13,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-
+//</editor-fold>
 /**
  *
  * @author duncan
  */
 public class SearchEngine {
-    protected Document page;
-    private String url;
-    protected String[] words;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-        
-        
-        //constructor
-        public SearchEngine(String url )
+/*----------------------------feilds------------------------------------------*/
+//<editor-fold>
+	protected Document page;
+	private String url;
+	protected String[] words;
+//</editor-fold>
+                
+/*-------------------------constructors---------------------------------------*/
+//<editor-fold>
+	public SearchEngine(String url )
         {
                 this.url = url;
         }
@@ -48,31 +43,58 @@ public class SearchEngine {
         {
                 url = "";
         }
-        
-        //methodsd
-        
-        public Document getPage() 
-        {
+//</editor-fold>        
+	    
+/*----------------------------Setters-----------------------------------------*/
+//<editor-fold>
+	/**
+	 * sets the page
+	 * @param page 
+	 */
+	public void setPage(String page) {
+		this.page = Jsoup.parse(page);
+        }
+	/**
+	 * sets the URL
+	 * @param url 
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	/**
+	 * sets the keywords
+	 * @param keywords 
+	 */
+	public void setKeywords(String keywords){
+            words = Stringer.split(" ", keywords);
+        }
+	/**
+         * gets the keyword form input separates on a space
+         */
+        public void setKeyWordsWithInput(){
+            	Scanner keyboard = new Scanner(System.in); 
+                String keywords;
+		System.out.println("Please enter your search criteria:");
+		keywords = keyboard.nextLine();
+		words = Stringer.split(" ", keywords);
+	}
+//</editor-fold>
+	
+/*----------------------------Getters-----------------------------------------*/
+//<editor-fold>
+	public Document getPage() {
                 return page;
         }
-        
-        //builds a string fron the results of a search
-        public static String StringResults(List<String[]> results){
-            String returns = "";
-            for (int i = 0; i <  results.size(); i++){
-                for (String string : results.get(i)){
-                    returns += string+"\t\t";
-                }
-                returns += "\n\n";
-            }
-            return returns;
-        }
-        
-        public void setPage(String page) 
-        {
-            this.page = Jsoup.parse(page);
-        }
-        
+	 
+	public String getUrl() {
+		return url;
+	}
+//</editor-fold>
+	
+/*##############################################################################
+ Class methouds
+##############################################################################*/        
+                
         /**
          * reads web page to a document 
          */
@@ -84,7 +106,8 @@ public class SearchEngine {
                 // get a documet from to the webpage
                     this.page = Jsoup.connect(url).get(); 
                 } catch (IOException ex) {
-                    Logger.getLogger(SearchEngine.class.getName()).log(Level.INFO, "could not conect to webpage", ex);
+                    Logger.getLogger(SearchEngine.class.getName()).
+			    log(Level.INFO, "could not conect to webpage", ex);
                     return false;
                 }
                 //horay you read the web page
@@ -93,25 +116,6 @@ public class SearchEngine {
             // it was emty
             return false;
         }
-        /**
-         * parses space sprated keywords;
-         * @param keywords 
-         */
-        public void setKeywords(String keywords){
-            words = Stringer.split(" ", keywords);
-        }
-        
-        /**
-         * gets the keyword form imput separates on a space
-         */
-        public void setKeyWordsWithInput()
-	{
-            	Scanner keyboard = new Scanner(System.in); 
-                String keywords;
-		System.out.println("Please enter your search criteria:");
-		keywords = keyboard.nextLine();
-		words = Stringer.split(" ", keywords);
-	}
         
         /**
          * genarates a string based 2 arrays 
@@ -119,7 +123,8 @@ public class SearchEngine {
          * @param the content of the table  
          * @return html string of a table
          */
-        public static String formHtml(String[] headers, List<String[]> listOfSortedArrays) {
+        public static String formHtml(String[] headers,
+		List<String[]> listOfSortedArrays) {
             String html = "<table class='results'><tr>";
             int numberOfCellsInTheText=headers.length;
             for (int i=0;i<numberOfCellsInTheText;i++){
@@ -137,7 +142,8 @@ public class SearchEngine {
             html+="</table>";
             return html;
         }
-        public static String resultsToHtml(List<String[]> results){
+        
+	public static String resultsToHtml(List<String[]> results){
             String placeHolder = "<a herf='%s'>%s</a><br/><p>%s</p>";
             String html = "<h1>Search Reasults</h1>";
             html+="<ul>";
@@ -149,5 +155,15 @@ public class SearchEngine {
             html+="</ul>";
             return html;
         }
-    
+	//builds a string fron the results of a search
+        public static String StringResults(List<String[]> results){
+            String returns = "";
+            for (int i = 0; i <  results.size(); i++){
+                for (String string : results.get(i)){
+                    returns += string+"\t\t";
+                }
+                returns += "\n\n";
+            }
+            return returns;
+        }
 }
