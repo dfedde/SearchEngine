@@ -98,6 +98,9 @@ public class SearchLinks extends SearchEngine {
  * in the database. the urls must also point to a real location;
  * @return String[] with the layout of [ "url1", "url2", ...]
  */
+    public String[] findLinks(){
+	    return null;
+    }
 
     public void resultsWriter() {
         System.out.println(findLinks(listOfLinks));

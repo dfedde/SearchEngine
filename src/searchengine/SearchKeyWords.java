@@ -98,6 +98,9 @@ public class SearchKeyWords extends SearchEngine {
  * @return String[][]  an array of ["url", "keyword1", "keyword2", ...]
  *	for each url. array is null if page has an error
  */
+    public static String[][] findKeywords(String[] urls){
+	    return null; 
+    }
     
     
     public static void main(String[] args) {
