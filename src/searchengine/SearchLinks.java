@@ -93,7 +93,11 @@ public class SearchLinks extends SearchEngine {
         }
         return listOfLinks;
     } 
-
+/**
+ * returns a list of links that are unque bouth to themselves and the link table
+ * in the database. the urls must also point to a real location;
+ * @return String[] with the layout of [ "url1", "url2", ...]
+ */
 
     public void resultsWriter() {
         System.out.println(findLinks(listOfLinks));
