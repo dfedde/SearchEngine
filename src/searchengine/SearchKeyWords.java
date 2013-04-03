@@ -90,7 +90,16 @@ public class SearchKeyWords extends SearchEngine {
         }
         return resaults;
     }
-
+/**
+ * this function takes a list of urls and 
+ * list of unique keywords from each
+ * 
+ * @param String[] a list of unique urls;
+ * @return String[String[]]  an array of ["url", "keyword1", "keyword2", ...]
+ *	for each url. array is null if page has an error
+ */
+    
+    
     public static void main(String[] args) {
         SearchKeyWords search = new SearchKeyWords("http://www.pageinc.org/");
         search.setKeyWordsWithInput();
