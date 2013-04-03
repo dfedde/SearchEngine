@@ -95,7 +95,7 @@ public class SearchKeyWords extends SearchEngine {
  * list of unique keywords from each. the key word must also not be in the
  * stop-words table
  * @param String[] a list of unique urls;
- * @return String[String[]]  an array of ["url", "keyword1", "keyword2", ...]
+ * @return String[][]  an array of ["url", "keyword1", "keyword2", ...]
  *	for each url. array is null if page has an error
  */
     
