@@ -98,7 +98,12 @@ public class SearchKeyWords extends SearchEngine {
  * @return String[][]  an array of ["url", "keyword1", "keyword2", ...]
  *	for each url. array is null if page has an error
  */
-    public static String[][] findKeywords(String[] urls){
+    public String[][] scrapewords(String[] urls){
+	    //make a 2d array list and a 2d array 
+	    //for each url
+		//for every word that is unque on the page 
+			//add a row to the array
+	    //return a coverted array list  
 	    return null; 
     }
     
