@@ -71,4 +71,19 @@ public class SearchKeyWordsTest {
         results = this.test.searchPages(listOfLinks);
         assertTrue("the arrays are not the same length", results.size() == listOfLinks.size());
     }
+    public void testsrcrapewords(){
+	String[] urls = new String[]
+	{"http://www.kbuxton.com/discordia/fnord.html"};
+	String[][] output = null;
+	System.out.println("scrape keywords");
+	output = this.test.scrapewords(urls);
+	assertTrue("array is emty",
+		output.length == 0||output == null);
+	for (String[] row : output) {
+		assertTrue("the first index is not a link",row[0]
+			.indexOf("http://")==0);
+		assertTrue("the first index is not a link",row[1]
+			.indexOf("<")==0);
+	}
+    }
 }
