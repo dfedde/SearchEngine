@@ -1,0 +1,19 @@
+CREATE TABLE `Keywords` (
+  `ID` bigint(19) NOT NULL AUTO_INCREMENT,
+  `url_ID` bigint(19) NOT NULL,
+  `keyword` varchar(100) NOT NULL,
+  `Weight` int(11) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Stop_Words` (
+  `ID` bigint(19) NOT NULL AUTO_INCREMENT,
+  `word` varchar(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `Urls` (
+  `ID` bigint(19) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
