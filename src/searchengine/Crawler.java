@@ -26,7 +26,7 @@ public class Crawler {
 				+ " SearchEngine.Keywords (keyword url_ID, Weight)"
 				+ " VALUES "
 				+ "(?, (SELECT ID FROM SearchEngine.Urls WHERE Name = ?),1)";
-		String [][] keywordarray = keywords.scrapeWords
+		String [][] keywordarray = keywords.ScrapeWords
 			(links.findLinksDB(new ArrayList<String[]>()));
 		for (String[] keyword : keywordarray) {
 			try {
