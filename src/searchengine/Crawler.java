@@ -3,7 +3,7 @@
  */
 package searchengine;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -39,6 +39,10 @@ public class Crawler {
 			}
 		}
 		
+	}
+	public static void main(String[] args){
+		Crawler crawler = new Crawler();
+		crawler.crawl();
 	}
 	
 }
