@@ -3,8 +3,6 @@
  */
 package crawler;
 
-//This is a test
-
 import com.mysql.jdbc.Connection;
 
 /**
