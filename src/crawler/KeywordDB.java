@@ -4,14 +4,19 @@
 package crawler;
 
 import com.mysql.jdbc.Connection;
+import java.util.Properties;
 
 /**
  * abstration for the database 
  * @author duncan
  */
 public class KeywordDB {
-	final private String DSN,PASSWORD,USERNAME;
-	private Connection conn;
+	final private String DSN;
+	final private String PASSWORD = "";
+	final private String USERNAME = "root";
+	private Connection Conn = null;
+	private Properties connoctionProperties = new Properties();
+	
 	
 	/**
 	 * define custom db paramitors
@@ -21,9 +26,10 @@ public class KeywordDB {
 	 */
 	public KeywordDB(String dsn,String password, String username){
 		DSN = dsn;
-		PASSWORD = password;
-		USERNAME = username;
+		connoctionProperties.put("password", password);
+		connoctionProperties.put("username", username);
 	}
+	
 	
 	/**
 	 *make a keywordDB with default DSN PASSWORD AND USERNAME
@@ -57,6 +63,15 @@ public class KeywordDB {
 	public boolean createLink(String... args){
 		return false;
 	}
+	/**
+	 * checks the database for the keyword
+	 * @param the keyword to check [url_id, keyword]
+	 * @return a array of all the keyword that are unique 
+	 */
+	public String[][] searchKeyword(String[]... args){
+		return null;
+	}
+	
 	/**
 	 * searches the database for 1 or more links 
 	 * @param args list of links to search for

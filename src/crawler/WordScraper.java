@@ -15,7 +15,7 @@ public class WordScraper {
 	 * database 
 	 * @return if the it was sucsesfull
 	 */
-	public boolean scrapeWords(){
+	public boolean scrape(){
 		return false;
 	}
 }
