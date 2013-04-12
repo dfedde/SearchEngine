@@ -76,7 +76,7 @@ public class SearchKeyWordsTest {
 	{"http://www.kbuxton.com/discordia/fnord.html"};
 	String[][] output = null;
 	System.out.println("scrape keywords");
-	output = this.test.scrapewords(urls);
+	output = this.test.ScrapeWords(urls);
 	assertTrue("array is emty",
 		output.length == 0||output == null);
 	for (String[] row : output) {

@@ -4,21 +4,19 @@
  */
 package crawler;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import org.jsoup.nodes.Document;
-
-//import search_engine.SearchKeywords;
-//////////////
-//////////////
-
-public class WordScraper extends Scraper {
-
-	public WordScraper (String url) {
-		super(url);
+/**
+ *
+ * @author duncan
+ */
+public class WordScraper {
+	
+	/**
+	 * grabs all a keyword off a page making sure it is uniqe to the
+	 * database 
+	 * @return if the it was sucsesfull
+	 */
+	public boolean scrape(){
+		return false;
 	}
         
         public WordScraper (){
