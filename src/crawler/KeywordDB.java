@@ -60,7 +60,7 @@ public class KeywordDB {
 	/**
 	 * searches the database for 1 or more links 
 	 * @param args list of links to search for
-	 * @return the remaing links that did not exist 
+	 * @return the remaining links that did not exist 
 	 */
 	public String[] searchLinks(String... args){
 		return null;
@@ -101,7 +101,7 @@ public class KeywordDB {
 	 * get the connection to the database
 	 * @return 
 	 */
-	private Connection getdbConnection(){
+	private boolean MakeDBConnection(){
 		return null;
 	}
 }

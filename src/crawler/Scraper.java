@@ -4,7 +4,6 @@
  */
 package crawler;
 
-import com.mysql.jdbc.Connection;
 import java.io.IOException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,9 +15,18 @@ import org.jsoup.nodes.Document;
 public class Scraper {
 	protected Document page;
 	protected String url;
-	protected Connection conn;
 	protected long url_id;
 	
+        /**********************Constructors****************************/
+        public Scraper(String url){
+            this.url = url;
+        }
+        
+        public Scraper(){
+            url = "";
+        }
+        
+        /**********************Getters and Setters*********************/
 	public String getUrl() {
 		return url;
 	}
@@ -35,6 +43,13 @@ public class Scraper {
 	protected void setPage(String page) {
 		this.page = Jsoup.parse(page);
 	}
+        
+        /**
+         * gets the document data contained within page
+         */
+        public Document getPage(){
+                return page;
+        }
 	
 	/**
 	 * reads web page from url field to page
