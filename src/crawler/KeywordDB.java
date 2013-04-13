@@ -3,8 +3,11 @@
  */
 package crawler;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Properties;
+import java.sql.SQLException;
+
 
 /**
  * abstration for the database 
@@ -16,7 +19,7 @@ public class KeywordDB {
 	final private String USERNAME = "root";
 	private Connection Conn = null;
 	private Properties connoctionProperties = new Properties();
-	
+	static final protected boolean DEBUG = true; 
 	
 	/**
 	 * define custom db paramitors
@@ -68,7 +71,7 @@ public class KeywordDB {
 	 * @param the keyword to check [url_id, keyword]
 	 * @return a array of all the keyword that are unique 
 	 */
-	public String[][] searchKeyword(String[]... args){
+	public String[][] searchKeyword(String[][]... args){
 		return null;
 	}
 	
@@ -77,6 +80,9 @@ public class KeywordDB {
 	 * @param args list of links to search for
 	 * @return the remaining links that did not exist 
 	 */
+        
+        
+        
 	public String[] searchLinks(String... args){
 		return null;
 	}
@@ -117,6 +123,37 @@ public class KeywordDB {
 	 * @return 
 	 */
 	private boolean MakeDBConnection(){
-		return null;
+            Connection connection = null;
+            
+            try{
+		Class.forName("com.mysql.jdbc.Driver");
+			
+		if (DEBUG)
+                    System.out.println("MySQL JDBC Driver Registered!");	
+			
+		//Make connection to the database
+		connection = DriverManager
+		.getConnection("jdbc:mysql://localhost/SearchEngineDB"
+				,"root", null);
+			
+		}catch (SQLException e){
+			if (DEBUG)
+			System.out.println("Connection Failed!! Check output console");
+			return false;
+			}catch (ClassNotFoundException e) {
+			if (DEBUG)
+			System.out.println("No MySQL JDBC Driver Found");
+			return false;
+			}
+			
+			//DB connection report block
+		if (DEBUG){
+			if (connection != null) {
+			System.out.println("Connection Succesful!");
+			} else {
+			System.out.println("Failed to make connection!");
+			}
+		}
+	return true;
 	}
 }
