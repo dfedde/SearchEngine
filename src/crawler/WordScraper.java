@@ -4,11 +4,13 @@
  */
 package crawler;
 
+import org.jsoup.nodes.Document;
+
 /**
  *
  * @author duncan
  */
-public class WordScraper {
+public class WordScraper extends Scraper{
 	
 	/**
 	 * grabs all a keyword off a page making sure it is uniqe to the
@@ -37,7 +39,6 @@ public class WordScraper {
 	public boolean Scrape() {	 
 		
                 KeywordDB dbMethods = new KeywordDB();
-                
 		//Read page for current url
 		if(!super.readWebPage()) {
 			return false;
@@ -50,13 +51,16 @@ public class WordScraper {
 		String allText = doc.text();
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");
+                String[][] urlAndPageWords = new String[pageTxtSplit.length][2];
 					 
 		//For loop to add each item from the currentUrlDataArray into the currentURLDataList
 		for(int i = 0; i < pageTxtSplit.length; i++) {
 			
-                        
-		return true;
-			
+                       urlAndPageWords[i][0] = super.getUrl();
+                       urlAndPageWords[i][0] = pageTxtSplit[i];
 		}
-	
+        dbMethods.searchKeyword(urlAndPageWords);
+        dbMethods.createKeywords(urlAndPageWords);
+        return true;
+        }
 }
