@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 /**
@@ -72,14 +73,33 @@ public class KeywordDB {
 	 * @return a array of all the keyword that are unique 
 	 */
 	public String[][] searchKeyword(String[][]... args){
-		return null;
-	}
 	
 	/**
 	 * searches the database for 1 or more links 
 	 * @param args list of links to search for
 	 * @return the remaining links that did not exist 
 	 */
+        Statement stmt = Conn.createStatement();
+        String sqlStatement;
+        for(int i = 0; i < args.length; i++)
+        {
+            
+        }
+            try{	
+	    	String sqlStatement = "SELECT * FROM Keyword WHERE keyword = '" + searchValue + "'" +
+	    							"  AND " + referenceColumn + " = '" + referenceValue + "'";
+	    			
+	    			
+	        ResultSet result = stmt.executeQuery(sqlStatement);
+	        	if(result.next()){
+	        		exists = !exists;
+	        	}
+	       } catch (SQLException e) {
+	        // TODO Auto-generated catch block
+	       // e.printStackTrace();
+	    	}
+        
+	 }
         
         
         
@@ -122,8 +142,8 @@ public class KeywordDB {
 	 * get the connection to the database
 	 * @return 
 	 */
-	private boolean MakeDBConnection(){
-            Connection connection = null;
+	public boolean MakeDBConnection(){
+            Conn = null;
             
             try{
 		Class.forName("com.mysql.jdbc.Driver");
@@ -132,7 +152,7 @@ public class KeywordDB {
                     System.out.println("MySQL JDBC Driver Registered!");	
 			
 		//Make connection to the database
-		connection = DriverManager
+		conn = DriverManager
 		.getConnection("jdbc:mysql://localhost/SearchEngineDB"
 				,"root", null);
 			
