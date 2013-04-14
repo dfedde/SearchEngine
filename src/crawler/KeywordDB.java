@@ -3,15 +3,12 @@
  */
 package crawler;
 
-import com.its.util.DataService;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.util.Properties;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -23,7 +20,6 @@ public class KeywordDB {
 	private String PASSWORD = "";
 	private String USERNAME = "";
 	private Connection Conn = null;
-	private Properties connoctionProperties = new Properties();
 	static final protected boolean DEBUG = true; 
 	
 	/**
@@ -34,8 +30,6 @@ public class KeywordDB {
 	 */
 	public KeywordDB(String dsn,String password, String username){
 		DSN = dsn;
-		connoctionProperties.put("PASSWORD", password);
-		connoctionProperties.put("USERNAME", username);
 	}
 	
 	
@@ -99,8 +93,21 @@ public class KeywordDB {
 	 * @param args
 	 * @return weather it worked or not 
 	 */
-	public boolean createLink(String... args){
-		return false;
+	public boolean createLink(String[]... args){
+		try{	
+                    for(int i = 0; i < args.length; i++){
+                        if(args[i].equals(null)){
+                            continue;
+                        }
+                    Statement stmt = Conn.createStatement();
+
+                           String sqlStmt = "INSERT INTO Urls (name) VALUES ('" + args[0][i] + "')";  
+                           stmt.execute(sqlStmt);
+                    }
+                   } catch (SQLException e) {
+
+                   }
+            return false;
 	}
 	
         /**
@@ -136,8 +143,22 @@ public class KeywordDB {
 	 * @param args list of links to search for
 	 * @return the remaining links that did not exist 
 	 */
-	public String[][] searchLinks(String args){
-		return null;
+	public String[][] searchLinks(String[]... args){
+		try{	
+                Statement stmt = Conn.createStatement();
+                for(int i = 0; i < args.length; i++) {
+                        String sqlStatement = "SELECT * FROM Urls WHERE url_ID = '" + args[i][0] + 
+                                            "' AND keyword = '"+ args[i][1] +"'";       
+                        ResultSet result = stmt.executeQuery(sqlStatement);
+                        if(result.next()){
+                            args[i] = null;
+                        }
+                    }
+                } catch (SQLException e) {
+	        // TODO Auto-generated catch block
+	       // e.printStackTrace();
+                }
+           return args;
 	}
       
 	/**
