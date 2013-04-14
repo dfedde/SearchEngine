@@ -17,14 +17,10 @@ public class WordScraper extends Scraper{
 	 * database 
 	 * @return if the it was sucsesfull
 	 */
-	public boolean scrape(){
-		return false;
-	}
-        
-        public WordScraper (){
-            super();
+        public WordScraper(String url){
+            super(url);
         }
-
+       
 	/**
 	 * This method will take a list of urls and pull ALL of the
 	 * words from each page into an array list, which will then be converted
@@ -39,6 +35,7 @@ public class WordScraper extends Scraper{
 	public boolean Scrape() {	 
 		
                 KeywordDB dbMethods = new KeywordDB();
+                dbMethods.MakeDBConnection();
 		//Read page for current url
 		if(!super.readWebPage()) {
 			return false;
@@ -52,7 +49,7 @@ public class WordScraper extends Scraper{
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");
                 String[][] urlAndPageWords = new String[pageTxtSplit.length][2];
-                urlAndPageWords[0][0] = dbMethods.searchLinks(super.url).toString();
+                urlAndPageWords[0][0] = String.valueOf(dbMethods.getUrlID(super.getUrl()));
                 
 					 
 		//For loop to add each item from the currentUrlDataArray into the currentURLDataList
@@ -61,14 +58,19 @@ public class WordScraper extends Scraper{
                        urlAndPageWords[i][0] = urlAndPageWords[0][0];
                        urlAndPageWords[i][1] = pageTxtSplit[i];
 		}
-        dbMethods.searchKeyword(urlAndPageWords);
-        dbMethods.createKeywords(urlAndPageWords);
+        dbMethods.AddKeywordUniqueToDB(urlAndPageWords);
         return true;
         }
         
         
         public static void main(String[] args)
         {
+            WordScraper myScraper = new WordScraper("http://www.colorado.gov/");
+            if(myScraper.Scrape());
+            {
+                System.out.println("That worked");
+            }
             
         }
 }
+
