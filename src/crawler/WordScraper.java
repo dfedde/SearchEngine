@@ -52,15 +52,23 @@ public class WordScraper extends Scraper{
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");
                 String[][] urlAndPageWords = new String[pageTxtSplit.length][2];
+                urlAndPageWords[0][0] = dbMethods.searchLinks(super.url).toString();
+                
 					 
 		//For loop to add each item from the currentUrlDataArray into the currentURLDataList
 		for(int i = 0; i < pageTxtSplit.length; i++) {
 			
-                       urlAndPageWords[i][0] = super.getUrl();
-                       urlAndPageWords[i][0] = pageTxtSplit[i];
+                       urlAndPageWords[i][0] = urlAndPageWords[0][0];
+                       urlAndPageWords[i][1] = pageTxtSplit[i];
 		}
         dbMethods.searchKeyword(urlAndPageWords);
         dbMethods.createKeywords(urlAndPageWords);
         return true;
+        }
+        
+        
+        public static void main(String[] args)
+        {
+            
         }
 }

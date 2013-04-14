@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.util.Properties;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -16,8 +18,8 @@ import java.sql.Statement;
  */
 public class KeywordDB {
 	final private String DSN;
-	final private String PASSWORD = "";
-	final private String USERNAME = "root";
+	final private String PASSWORD;
+	final private String USERNAME;
 	private Connection Conn = null;
 	private Properties connoctionProperties = new Properties();
 	static final protected boolean DEBUG = true; 
@@ -28,7 +30,7 @@ public class KeywordDB {
 	 * @param password
 	 * @param username 
 	 */
-	public KeywordDB(String dsn,String password, String username){
+	/*public KeywordDB(String dsn,String password, String username){
 		DSN = dsn;
 		connoctionProperties.put("password", password);
 		connoctionProperties.put("username", username);
@@ -39,9 +41,11 @@ public class KeywordDB {
 	 *make a keywordDB with default DSN PASSWORD AND USERNAME
 	 */
 	public KeywordDB(){
-		DSN = "some DSN";
-		PASSWORD = "some password";
-		USERNAME = "some username";
+		DSN = "jdbc:mysql://localhost/SearchEngineDB";
+		USERNAME = "root";
+                PASSWORD = "null";
+		
+                
 	}
 	/**
 	 * adds a keyword to that database
@@ -72,33 +76,31 @@ public class KeywordDB {
 	 * @param the keyword to check [url_id, keyword]
 	 * @return a array of all the keyword that are unique 
 	 */
-	public String[][] searchKeyword(String[][]... args){
+	public String[][] searchKeyword(String[]... args){
 	
 	/**
 	 * searches the database for 1 or more links 
 	 * @param args list of links to search for
 	 * @return the remaining links that did not exist 
 	 */
-        Statement stmt = Conn.createStatement();
-        String sqlStatement;
-        for(int i = 0; i < args.length; i++)
-        {
-            
-        }
+            String sqlStatement;
+
             try{	
-	    	String sqlStatement = "SELECT * FROM Keyword WHERE keyword = '" + searchValue + "'" +
-	    							"  AND " + referenceColumn + " = '" + referenceValue + "'";
-	    			
-	    			
-	        ResultSet result = stmt.executeQuery(sqlStatement);
-	        	if(result.next()){
-	        		exists = !exists;
-	        	}
+                Statement stmt = Conn.createStatement();
+                for(int i = 0; i < args.length; i++)
+                    {
+                        sqlStatement = "SELECT * FROM Keywords WHERE url_ID = '" + args[i][0] + 
+                                            "' AND keyword = '"+ args[i][1] +"';";       
+                        stmt.addBatch(sqlStatement);
+                    }
+
+                int returnValue[] = stmt.executeBatch();
+     
 	       } catch (SQLException e) {
 	        // TODO Auto-generated catch block
 	       // e.printStackTrace();
 	    	}
-        
+           return args;
 	 }
         
         
@@ -152,9 +154,8 @@ public class KeywordDB {
                     System.out.println("MySQL JDBC Driver Registered!");	
 			
 		//Make connection to the database
-		conn = DriverManager
-		.getConnection("jdbc:mysql://localhost/SearchEngineDB"
-				,"root", null);
+		Conn = DriverManager
+		.getConnection(DSN,USERNAME, PASSWORD);
 			
 		}catch (SQLException e){
 			if (DEBUG)
@@ -168,7 +169,7 @@ public class KeywordDB {
 			
 			//DB connection report block
 		if (DEBUG){
-			if (connection != null) {
+			if (Conn != null) {
 			System.out.println("Connection Succesful!");
 			} else {
 			System.out.println("Failed to make connection!");
