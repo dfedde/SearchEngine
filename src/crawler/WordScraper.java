@@ -43,8 +43,11 @@ public class WordScraper extends Scraper{
 		
                 //Parse web page into pageTxtSplit[]
 		Document doc = super.getPage();
+		//paring words twice
 		String bText = doc.body().text();
+		//all <p> tags are in the body
 		String pText = doc.select("p").text();
+		//need <title> all <h{}> <ul> <ol> tags not shure of the best way as some will be duplaates
 		String allText = doc.text();
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");

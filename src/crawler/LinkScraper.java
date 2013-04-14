@@ -15,8 +15,8 @@ public class LinkScraper {
 	 * database 
 	 * @return the word it found [url_id, word]
 	 */
-	public String[] scrape(){
-		return null;
+	public boolean scrape(){
+		return false;
 	}
 	
 }
