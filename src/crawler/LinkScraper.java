@@ -8,8 +8,11 @@ package crawler;
  *
  * @author duncan
  */
-public class LinkScraper {
-	
+public class LinkScraper extends Scraper{
+
+	LinkScraper(String url) {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
 	/**
 	 * scrapes a link off a page making sure it is uniqe to the
 	 * database 

@@ -289,4 +289,20 @@ public class KeywordDB {
                 }
            return args;
         }
+	
+	/**
+	 * gets the last link
+	 * @param int modfier for witch link to return
+	 * @return String the last Url in the array
+	 */
+	public String getLastLink(int refindex){
+		return null;
+	}
+	/**
+	 * get last link that has not been updated if all have grab latetest
+	 * @retun String the Url
+	 */
+	public String getFirstLink(){
+		return null;
+	} 
 }
