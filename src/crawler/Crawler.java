@@ -16,8 +16,8 @@ public class Crawler {
 	public static void runLinkScraper(){
 		LinkScraper links = new LinkScraper();
 		//set link to last array
-		while(links.scrape()){
-		//set links to last array -1 	
+		while(!links.scrape()){
+			//set links to last array -1 	
 		}
 	}
 	/**
@@ -26,7 +26,7 @@ public class Crawler {
 	public static void runwordScraper(){
 		WordScraper words = new WordScraper(null);
 		//set link = to first link with no date
-		while(words.Scrape()){
+		while(!words.Scrape()){
 			//set link to next array without a date
 		}
 	}
