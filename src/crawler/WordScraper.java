@@ -4,6 +4,8 @@
  */
 package crawler;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jsoup.nodes.Document;
 
 /**
@@ -12,6 +14,9 @@ import org.jsoup.nodes.Document;
  */
 public class WordScraper extends Scraper{
 	
+        //Array list that will be used to check for duplicate data on each page
+        List<String> checkForDuplicates = new ArrayList<String>();
+    
 	/**
 	 * grabs all a keyword off a page making sure it is uniqe to the
 	 * database 
@@ -51,29 +56,39 @@ public class WordScraper extends Scraper{
 		String allText = doc.text();
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");
-                String[][] urlAndPageWords = new String[pageTxtSplit.length][2];
-                urlAndPageWords[0][0] = String.valueOf(dbMethods.getUrlID(super.getUrl()));
                 
-					 
-		//For loop to add each item from the currentUrlDataArray into the currentURLDataList
-		for(int i = 0; i < pageTxtSplit.length; i++) {
-			
-                       urlAndPageWords[i][0] = urlAndPageWords[0][0];
-                       urlAndPageWords[i][1] = pageTxtSplit[i];
+                for(int i = 0; i < pageTxtSplit.length; i++) {
+                    if(checkForDuplicates.contains(pageTxtSplit[i]))
+                        {
+                            continue; //already grabbed this word on this page
+                        }
+                        checkForDuplicates.add(pageTxtSplit[i]);
+                }
+                //Array that will be sent into te DB methods
+		String[][] urlAndPageWords = new String[checkForDuplicates.size()][2];
+                
+		//For loop to add each item from the checkForDuplicates list into the urlAndPageWords
+		for(int j = 0; j < checkForDuplicates.size(); j++) {
+                      
+                        urlAndPageWords[j][0] = String.valueOf(dbMethods.getUrlID(super.getUrl()));
+                        urlAndPageWords[j][1] = checkForDuplicates.get(j);
 		}
-        dbMethods.AddKeywordUniqueToDB(urlAndPageWords);
+        //Check words against DB
+        urlAndPageWords = dbMethods.searchKeyword(urlAndPageWords);
+        //Add words to DB
+        dbMethods.createKeywords(urlAndPageWords);
         return true;
         }
         
         
-        public static void main(String[] args)
-        {
+      public static void main(String[] args){
             WordScraper myScraper = new WordScraper("http://www.colorado.gov/");
             if(myScraper.Scrape());
             {
                 System.out.println("That worked");
             }
-            
         }
 }
+
+
 

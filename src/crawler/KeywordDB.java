@@ -8,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -50,9 +52,6 @@ public class KeywordDB {
             
                 try{	
                     for(int i = 0; i < args.length; i++){
-                        if(args[i].equals(null)){
-                            continue;
-                        }
                     Statement stmt = Conn.createStatement();
                            String sqlStmt = "INSERT INTO Keywords (url_ID, keyword, Weight) VALUES " +
                                                         "(" + args[i][0] + ", '" + args[i][1] + "' , 0)";  
@@ -73,9 +72,7 @@ public class KeywordDB {
 	public boolean createStopWord(String... word){
 		try{	
                     for(int i = 0; i < word.length; i++){
-                        if(word[i].equals(null)){
-                            continue;
-                        }
+                        
                     Statement stmt = Conn.createStatement();
 
                            String sqlStmt = "INSERT INTO Stop_Words (word) VALUES ('" + word[i] + "')";  
@@ -119,21 +116,29 @@ public class KeywordDB {
 	 */
         
 	public String[][] searchKeyword(String[]... args){
+            
+            List<String> wordsUniqueToDB = new ArrayList<String>();
             try{	
                 Statement stmt = Conn.createStatement();
                 for(int i = 0; i < args.length; i++) {
                         String sqlStatement = "SELECT * FROM Keywords WHERE url_ID = '" + args[i][0] + 
                                             "' AND keyword = '"+ args[i][1] +"'";       
                         ResultSet result = stmt.executeQuery(sqlStatement);
-                        if(result.next()){
-                            args[i] = null;
+                        if(!result.next()){
+                            wordsUniqueToDB.add(args[i][1]);
                         }
                     }
                 } catch (SQLException e) {
 	        // TODO Auto-generated catch block
 	       // e.printStackTrace();
                 }
-           return args;
+                
+                String[][] uniqueWords = new String[wordsUniqueToDB.size()][2];
+                for(int j = 0; j < wordsUniqueToDB.size(); j++){
+                    uniqueWords[j][0] = args[0][0];
+                    uniqueWords[j][1] = wordsUniqueToDB.get(j);
+                }
+           return uniqueWords;
 	 }
         
         
@@ -252,43 +257,7 @@ public class KeywordDB {
 	    return 0;
         }
         
-        /**
-         * Checks to see if each word within the passed array exist's within
-         * the Keywords or Stop_Words database tables. If it does not, 
-         * then the word is added to the DB
-         * @param args
-         * @return 
-         */
-        public String[][] AddKeywordUniqueToDB(String[]... args){
-            
-            try{	
-                Statement stmt = Conn.createStatement();
-                for(int i = 0; i < args.length; i++){
-                        String sqlStatement = "SELECT * FROM Keywords WHERE url_ID = '" + args[i][0] + 
-                                            "' AND keyword = '"+ args[i][1] +"'";       
-                        ResultSet result = stmt.executeQuery(sqlStatement);
-                        
-                        //If keyword does not exist in Keyword Table, check stop words table
-                        if(!result.next()){
-                            
-                            sqlStatement = "SELECT * FROM Stop_Words WHERE word = '" + args[i][1] + "'";       
-                            result = stmt.executeQuery(sqlStatement);
-                            
-                            //if keyword does not exist in stop words table, add word to DB
-                            if(!result.next()){
-                                String insertStmt = "INSERT INTO Keywords (url_ID, keyword, Weight) VALUES " +
-                                                        "(" + args[i][0] + ", '" + args[i][1] + "' , 0)";  
-                                stmt.execute(insertStmt);
-                                args[i][1] = "Data added";
-                            }
-                        }
-                    }
-                } catch (SQLException e) {
-	        // TODO Auto-generated catch block
-	       // e.printStackTrace();
-                }
-           return args;
-        }
+        
 	
 	/**
 	 * gets the last link
