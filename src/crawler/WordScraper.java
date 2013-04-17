@@ -57,6 +57,7 @@ public class WordScraper extends Scraper{
 		String pageText = allText + pText + bText;
 		String[] pageTxtSplit = pageText.split("\\s+");
                 
+                //Collect all unique words from the pageTxtSplit array into array list
                 for(int i = 0; i < pageTxtSplit.length; i++) {
                     if(checkForDuplicates.contains(pageTxtSplit[i]))
                         {
@@ -82,6 +83,8 @@ public class WordScraper extends Scraper{
         
         
       public static void main(String[] args){
+            System.out.println("    ");
+          
             WordScraper myScraper = new WordScraper("http://www.colorado.gov/");
             if(myScraper.Scrape());
             {
