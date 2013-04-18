@@ -1,41 +1,143 @@
+package sql;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package crawler;
 
-import searchengine.SearchEngine;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import com.its.util.IOMaster;
 import com.its.util.Stringer;
-/**
- *
- * @author Oralndo
- */
-public class LinkScraper extends Scraper {
-	
-        public String page;
-	public String url;
-	private List<String> listOfUrls = new ArrayList<String>();
-	
-	/**
-	 * scrapes a link off a page making sure it is uniqe to the
-	 * database 
-	 * @return the word it found [url_id, word]
-	 */
+import com.mysql.jdbc.PreparedStatement;
 
-	public boolean scrape(){
-            
-                KeywordDB dbMethods = new KeywordDB();
-            
-            
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+
+public class LinkScraper
+{
+	//DATA
+	public String page;
+	public String url;
+	public String DBUrl;
+	private List<String> listOfUrls = new ArrayList<String>();
+	public static int maxNumberOfLinks = 10; // limit the resulting links	
+	
+	
+	//Constructors --------------------------------------------------------------------
+	public LinkScraper()
+	{
+		url = "http://www.colorado.gov";
+	}
+	
+	public LinkScraper(String webpage)
+	{
+		url = webpage;
+	}
+	
+	//Get methods-----------------------------------------------------------------------
+	public String getPage() 
+	{
+		return page;
+	}
+	
+	public String getUrl()
+	{
+		return url;
+	}
+	
+	
+	public List<String> getlistOfUrls()
+	{
+		return listOfUrls;
+	}
+	
+	public String getDBUrl()
+	{
+		return DBUrl;
+	}
+
+	//Set Methods-----------------------------------------------------------------------
+	public void setPage(String inputPage) 
+	{
+		page = inputPage;
+	}
+	
+	public void setUrl(String inputUrl)
+	{
+		url = inputUrl;
+	}
+	
+	public void setDBUrl(String lnk)
+	{
+		DBUrl = lnk;
+	}
+	
+	
+	//Utility Methods-------------------------------------------------------------------
+	/**
+	 * readWebPage saves the target web page as a text string 
+	 * (target based on the url variable) 
+	 */
+	public void readWebPage()
+	{
+		page = IOMaster.readTextFile(url);
+	}
+	
+	
+	public void compareLink(String webLink)
+	{
+	String host = "jdbc:mysql://localhost/SearchEngineDB";
+	String uName = "USERNAME";
+	String uPass = "PASSWORD";
+	String link = webLink;
+	try{
+		Connection conn = DriverManager.getConnection(host, uName, uPass);
+		Statement stmt = conn.createStatement();
+		String sqlStatement = "Select * FROM links WHERE links =" + "'" + link + "'";
+		ResultSet results = stmt.executeQuery(sqlStatement);
+		
+		while(results.next()){
+			setDBUrl(results.getString("links"));
+		}
+		
+		conn.close();
+		
+		}
+	catch(Exception ex){
+		System.out.println("error: " + ex.getMessage());
+	}
+	}
+	
+	public void addStringDB(String webLink)
+	{
+		String host = "jdbc:mysql://localhost/SearchEngineDB";
+		String uName = "USERNAME";
+		String uPass = "PASSWORD";
+		String link = webLink;
+		
+		try{
+			Connection conn = DriverManager.getConnection(host, uName, uPass);
+			Statement stmt = conn.createStatement();
+			String sqlStatement = "INSERT INTO Urls " + "(name)" + " VALUES ('" + link + "')";
+			stmt.executeUpdate(sqlStatement);
+			//sqlStatement = "INSERT INTO linkstable " + "(Link)" + " VALUE ('" + link + "')";
+			//stmt.executeUpdate(sqlStatement);
+			}
+		catch(Exception ex){
+			System.out.println("error: " + ex.getMessage());
+		}
+		
+	}
+	
+	public List<String[]> findLinks(List<String[]> listOfLinks) 
+	{ 
 		if(page.startsWith("ERROR:")) 
 		{ 
-			return false; 
+			return listOfLinks; 
 		} 
 		
 		String[] links = Stringer.split("<a ", page); 
@@ -80,31 +182,65 @@ public class LinkScraper extends Scraper {
 			{ 
 				url = url.substring(0, url.length() -1); // remove the ending quote
 			}
-                        if(urlInLowCase.endsWith(".jpg") || urlInLowCase.endsWith(".gif") ||
+			//initiate the KeywordDB
+			
+			//Create and if statement to check if the link is unique if so add the link to the database
+			//all links will be lowercase
+			
+			//
+			
+			/*
+			//System.out.println("going to compare");
+			if(listOfUrls.contains(url.toLowerCase())) 
+			{
+				continue; // been there, done that
+			}
+			compareLink(url.toLowerCase());
+			if(getDBUrl() == url.toLowerCase())
+			{
+				continue;
+			}
+			*/
+			//System.out.println("going to add");
+			
+			//addStringDB(url.toLowerCase());
+			
+			listOfUrls.add(url.toLowerCase()); // remember all urls visited
+			String[] arrayOfLinkParts = new String[] {url+""}; // score=number of keywords
+			listOfLinks.add(arrayOfLinkParts);
+			// check if enough links found
+			if(listOfLinks.size() >= maxNumberOfLinks) 
+			{
+				return listOfLinks; // enough links! we are done!
+			}
+			if(urlInLowCase.endsWith(".jpg") || urlInLowCase.endsWith(".gif") ||
 				urlInLowCase.endsWith(".png"))
 			{
 				continue; // do not read an image page
 			}
-                        if(listOfUrls.contains(url.toLowerCase())) 
-			{
-				continue; // been there, done that
+			// read the page with the link
+			setUrl(url);
+			readWebPage();
+			if(!page.startsWith("ERROR:")) // check if page was readable
+			{ 
+				findLinks(listOfLinks); // recursive call
 			}
-                        
-			//initiate the KeywordDB
-			//Create and if statement to check if the link is unique if so add the link to the database
-			//all links will be lowercase
-			if(dbMethods.searcsearchLiks.toLowerCase() == url.toLowerCase()){
-                            continue;
-                        }
-                        dbMethods.createLink(url.toLowerCase());
-			//
-                        listOfUrls.add(url.toLowerCase()); // remember all urls visited
-			//String[] arrayOfLinkParts = new String[] {url+""}; // score=number of keywords
-			//listOfLinks.add(arrayOfLinkParts);
-			// check if enough links found
-			
-			
 			} // end the for loop for all links
-				return false;
+				return listOfLinks;
 		} // end of the method
+	
+	
+
+
+
+
+public static void main (String[] args){
+	
+	LinkScraper search = new LinkScraper("http://www.google.com/");
+	search.readWebPage();
+	List<String[]> listOfLinks = search.findLinks(new ArrayList<String[]>());
+	System.out.println("done");
+	
+	
+}
 }

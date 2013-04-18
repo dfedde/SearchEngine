@@ -105,6 +105,25 @@ public class KeywordDB {
                    }
             return false;
 	}
+        
+       public void createLink(String webLink)
+	{
+	
+		String link = webLink;
+		
+		try{
+			Statement stmt = Conn.createStatement();
+			String sqlStatement = "INSERT INTO links " + "(links)" + " VALUE ('" + link + "')";
+			stmt.executeUpdate(sqlStatement);
+			//sqlStatement = "INSERT INTO linkstable " + "(Link)" + " VALUE ('" + link + "')";
+			//stmt.executeUpdate(sqlStatement);
+			}
+		catch(Exception ex){
+			System.out.println("error: " + ex.getMessage());
+		}
+		
+	}
+
 	
         /**
 	 * Built to accepts an array which contains a Keyword along with the 
@@ -164,6 +183,7 @@ public class KeywordDB {
                 }
            return args;
 	}
+        
       
 	/**
 	 * searches the database for 1 or more stopwords 
