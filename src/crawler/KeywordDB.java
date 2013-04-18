@@ -285,7 +285,7 @@ public class KeywordDB {
 	 * @return String the last Url in the array
 	 */
 	public String getLastLink(int refindex){
-		return null;
+		return "http://colorado.com";
 	}
 	/**
 	 * get last link that has not been updated if all have grab latetest

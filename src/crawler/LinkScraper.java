@@ -1,19 +1,14 @@
-package sql;
-
-
+package crawler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.its.util.IOMaster;
 import com.its.util.Stringer;
-import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 
@@ -91,8 +86,8 @@ public class LinkScraper
 	public void compareLink(String webLink)
 	{
 	String host = "jdbc:mysql://localhost/SearchEngineDB";
-	String uName = "USERNAME";
-	String uPass = "PASSWORD";
+	String uName = "root";
+	String uPass = "";
 	String link = webLink;
 	try{
 		Connection conn = DriverManager.getConnection(host, uName, uPass);
@@ -115,8 +110,8 @@ public class LinkScraper
 	public void addStringDB(String webLink)
 	{
 		String host = "jdbc:mysql://localhost/SearchEngineDB";
-		String uName = "USERNAME";
-		String uPass = "PASSWORD";
+		String uName = "root";
+		String uPass = "";
 		String link = webLink;
 		
 		try{
