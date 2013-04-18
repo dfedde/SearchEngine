@@ -141,6 +141,38 @@ public class KeywordDB {
            return uniqueWords;
 	 }
         
+        /**
+	 * Search tool for the searchFrame application. This method will be
+         * used by the GUI to search the database for keywords
+	 * @param the keyword to check [url_id, keyword]
+	 * @return a array of all the keyword that are unique 
+	 */
+        
+	public String[][] searchKeyword_GUI(String[]args){
+            
+            List<String> webPageIDValues = new ArrayList<String>();
+            try{	
+                Statement stmt = Conn.createStatement();
+                for(int i = 0; i < args.length; i++) {
+                        String sqlStatement = "SELECT * FROM Keywords WHERE keyword = '"+ args[i] +"'";       
+                        ResultSet result = stmt.executeQuery(sqlStatement);
+                        
+                        if(result.next()){
+                            webPageIDValues.add(result.getString(2));
+                        }
+                    }
+                } catch (SQLException e) {
+	        // TODO Auto-generated catch block
+	       // e.printStackTrace();
+                }
+                
+                String[][] urlIDArray = new String[webPageIDValues.size()][2];
+                for(int j = 0; j < webPageIDValues.size(); j++){
+                    urlIDArray[j][0] = webPageIDValues.get(j);
+                }
+           return urlIDArray;
+	 }
+        
         
 	/**
 	 * searches the database for 1 or more links 
@@ -255,6 +287,40 @@ public class KeywordDB {
 	       // e.printStackTrace();
 	    	}
 	    return 0;
+        }
+        
+        /**
+         * Returns the url_ID value from the DB of the string URL that
+         * was passed into the method
+         * @param args
+         * @return 
+         */
+        public String[][] getUrlByID(String[]... args){
+            
+            List<String> urls = new ArrayList<String>();
+	    try{
+	    	Statement stmt = Conn.createStatement();
+                
+                for (int i = 0; i < args.length; i++){
+	    	String sqlStatement = "SELECT * FROM Urls WHERE ID = " + args[i][0];
+	        ResultSet result = stmt.executeQuery(sqlStatement);
+	        
+                
+                while(result.next()){
+                    urls.add(result.getNString(2));
+                    }
+                }
+	       }catch (SQLException e) {
+	        // TODO Auto-generated catch block
+	       // e.printStackTrace();
+	    	}
+            
+            String[][] finalUrlArray = new String[urls.size()][1];
+                for (int j = 0; j < args.length; j++){
+                    finalUrlArray[j][0] = urls.get(j);
+                }
+            
+	    return finalUrlArray;
         }
         
         

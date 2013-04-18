@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 
 /**
  *
- * @author duncan
+ * @author Julian
  */
 public class WordScraper extends Scraper{
 	
@@ -85,7 +85,7 @@ public class WordScraper extends Scraper{
       public static void main(String[] args){
             System.out.println("    ");
           
-            WordScraper myScraper = new WordScraper("http://www.colorado.gov/");
+            WordScraper myScraper = new WordScraper("http://www.denvergov.org/apps4/subscriptions/subsc...");
             if(myScraper.Scrape());
             {
                 System.out.println("That worked");
