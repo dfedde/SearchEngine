@@ -351,13 +351,27 @@ public class KeywordDB {
 	 * @return String the last Url in the array
 	 */
 	public String getLastLink(int refindex){
-		return "http://colorado.com";
+		try{	
+                Statement stmt = Conn.createStatement();
+                        String sqlStatement = "SELECT Name FROM Urls WHERE ID >= RAND() * (SELECT MAX(ID) FROM Urls) LIMIT 1";       
+                        ResultSet result = stmt.executeQuery(sqlStatement);
+			return result.getNString(0);
+                } catch (SQLException e) {
+			return null;
+                }
 	}
 	/**
 	 * get last link that has not been updated if all have grab latetest
 	 * @retun String the Url
 	 */
 	public String getFirstLink(){
-		return null;
+		try{	
+                Statement stmt = Conn.createStatement();
+                        String sqlStatement = "SELECT Name FROM Urls WHERE ID >= RAND() * (SELECT MAX(ID) FROM Urls) LIMIT 1";       
+                        ResultSet result = stmt.executeQuery(sqlStatement);
+			return result.getNString(0);
+                } catch (SQLException e) {
+			return null;
+                }
 	} 
 }
