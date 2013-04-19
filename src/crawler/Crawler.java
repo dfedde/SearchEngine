@@ -14,22 +14,30 @@ public class Crawler {
 	 * sets the link scraper to the net real page 
 	 */
 	public static void runLinkScraper(KeywordDB DB){
-		//set link to last array
-		LinkScraper links = new LinkScraper(DB.getLastLink(0));
+                String test = DB.getLastLink(0);
+                System.out.println("LinkScraperLink:" + test);
+            
+                //set link to last array
+		LinkScraper links = new LinkScraper(test);
 		int counter = 1;
-		while(!links.scrape()){
+		while(!links.Scrape()){
 			//set links to last array -1
-			links.setUrl(DB.getLastLink(counter)); 	
+			links.setUrl(DB.getLastLink(counter));
+                        counter++;
 		}
 	}
 	/**
 	 * sets the word scraper to the next real page 
 	 */
 	public static void runwordScraper(KeywordDB DB){
-		WordScraper words = new WordScraper(DB.getFirstLink());
+                String test = DB.getFirstLink();
+                System.out.println("WordScraperLnik:" + test);
+		WordScraper words = new WordScraper(test);
 		//set link = to first link with no date
-		while(!words.Scrape()){
-			DB.getFirstLink();
+	
+                while(!words.Scrape()){
+			words.setUrl(DB.getFirstLink());
+                        
 			//set link to next array without a date
 		}
 	}
@@ -42,6 +50,7 @@ public class Crawler {
 			runLinkScraper(DB);
 			runwordScraper(DB);
 		}
-	}
+	
+        }
 	
 }

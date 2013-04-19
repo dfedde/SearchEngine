@@ -97,7 +97,7 @@ public class KeywordDB {
                         }
                     Statement stmt = Conn.createStatement();
 
-                           String sqlStmt = "INSERT INTO Urls (name) VALUES ('" + args[0][i] + "')";  
+                           String sqlStmt = "INSERT INTO Urls (Name) VALUES ('" + args[i][1] + "')";  
                            stmt.execute(sqlStmt);
                     }
                    } catch (SQLException e) {
@@ -113,7 +113,7 @@ public class KeywordDB {
 		
 		try{
 			Statement stmt = Conn.createStatement();
-			String sqlStatement = "INSERT INTO links " + "(links)" + " VALUE ('" + link + "')";
+			String sqlStatement = "INSERT INTO Urls " + "(Name)" + " VALUE ('" + link + "')";
 			stmt.executeUpdate(sqlStatement);
 			//sqlStatement = "INSERT INTO linkstable " + "(Link)" + " VALUE ('" + link + "')";
 			//stmt.executeUpdate(sqlStatement);
@@ -355,7 +355,8 @@ public class KeywordDB {
                 Statement stmt = Conn.createStatement();
                         String sqlStatement = "SELECT Name FROM Urls WHERE ID >= RAND() * (SELECT MAX(ID) FROM Urls) LIMIT 1";       
                         ResultSet result = stmt.executeQuery(sqlStatement);
-			return result.getNString(0);
+                        result.next();
+			return result.getString(1);
                 } catch (SQLException e) {
 			return null;
                 }
@@ -369,7 +370,8 @@ public class KeywordDB {
                 Statement stmt = Conn.createStatement();
                         String sqlStatement = "SELECT Name FROM Urls WHERE ID >= RAND() * (SELECT MAX(ID) FROM Urls) LIMIT 1";       
                         ResultSet result = stmt.executeQuery(sqlStatement);
-			return result.getNString(0);
+			result.next();
+                        return result.getString(1);
                 } catch (SQLException e) {
 			return null;
                 }

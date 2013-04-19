@@ -60,9 +60,12 @@ public class Scraper {
 			try {
 				// get a documet from to the webpage
 				this.page = Jsoup.connect(url).get();
-			} catch (IOException ex) {
+			} catch (IllegalArgumentException e) {
 				return false;
 			}
+                        catch (IOException e){
+                            return false;
+                        }
 			// horay you read the web page
 			return true;
 		}

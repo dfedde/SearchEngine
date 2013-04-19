@@ -54,7 +54,7 @@ public class LinkScraper extends Scraper{
 		Elements links = page.select("a[href]");
 		String[] urls = new String[links.size()];
 		for (int i = 0; i < links.size(); i++) {
-			urls[i] = links.get(i).attr("heref");
+			urls[i] = links.get(i).attr("href");
 		}
                 //Collect all unique words from the pageTxtSplit array into array list
                 for(int i = 0; i < urls.length; i++) {
