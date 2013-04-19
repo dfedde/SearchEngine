@@ -176,7 +176,7 @@ public class KeywordDB {
                         String sqlStatement = "SELECT * FROM Keywords WHERE keyword = '"+ args[i] +"'";       
                         ResultSet result = stmt.executeQuery(sqlStatement);
                         
-                        if(result.next()){
+                        while(result.next()){
                             webPageIDValues.add(result.getString(2));
                         }
                     }
@@ -326,7 +326,7 @@ public class KeywordDB {
 	        ResultSet result = stmt.executeQuery(sqlStatement);
 	        
                 
-                while(result.next()){
+                if (result.next()){
                     urls.add(result.getNString(2));
                     }
                 }

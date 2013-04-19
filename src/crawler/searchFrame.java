@@ -113,14 +113,50 @@ public class searchFrame extends javax.swing.JFrame {
                 String[][] urlSearchResults = searchDB.getUrlByID(urlID_Results);
                 String finalResults = " ";
                 
-                for (int i = 0; i < urlSearchResults.length; i ++){
-                    finalResults = "Link: " + urlSearchResults[i][0] + "\n";
-                }
+                /*for (int i = 0; i < urlSearchResults.length; i ++){
+                    finalResults = finalResults + urlSearchResults[i][0] + "\n";
+                }*/
+                String[] resultHeaders = {"Url Search Results"};
+                finalResults = formHtml(resultHeaders, urlSearchResults);
+                
                                 	
 		resultsPane.setText(finalResults);
 
 	}// GEN-LAST:event_goButtonActionPerformed
 
+        
+        /**
+	 * formHTML will create an html document to output the search results
+	 */
+	public String formHtml(String[] headers,String[]...args)
+	{
+			//start the table to place the text
+			String html = "<table border=2><tr>";
+			int numberOfCellsInTheText = headers.length;
+			
+			//prepare headers
+			for(int i = 0; i<numberOfCellsInTheText; i++)
+			{
+				html += "<th>" + headers[i] + "</th>";
+			}
+			html += "</tr>"; // end of the row of headers
+			//display data line by line
+			for (int i=0; i< args.length; i++)
+			{
+				html += "<tr>"; //a new row
+				String[] data = args[i];
+					for(int j=0; j < data.length; j++)
+					{
+						html += "<td>" + data[j] + "</td>";
+					}
+				html += "</tr>"; // end of row
+			}
+			html += "</table>"; //end of table
+			return html;
+	}
+        
+        
+        
 	/**
 	 * @param args
 	 *            the command line arguments
