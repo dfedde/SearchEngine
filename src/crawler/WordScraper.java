@@ -4,6 +4,8 @@
  */
 package crawler;
 
+import com.its.util.StringMaster;
+import com.its.util.Stringer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jsoup.nodes.Document;
@@ -20,7 +22,7 @@ public class WordScraper extends Scraper{
 	/**
 	 * grabs all a keyword off a page making sure it is uniqe to the
 	 * database 
-	 * @return if the it was sucsesfull
+	 * @return if the it was succesfull
 	 */
         public WordScraper(String url){
             super(url);
@@ -52,10 +54,12 @@ public class WordScraper extends Scraper{
 		String bText = doc.body().text();
 		//all <p> tags are in the body
 		String pText = doc.select("p").text();
+                //All table text in the body
+                String tableTxt = doc.select("table").text();
 		//need <title> all <h{}> <ul> <ol> tags not shure of the best way as some will be duplaates
 		String allText = doc.text();
 		String pageText = allText + pText + bText;
-		String[] pageTxtSplit = pageText.split("\\s+");
+		String[] pageTxtSplit = allText.split("\\s+");
                 
                 //Collect all unique words from the pageTxtSplit array into array list
                 for(int i = 0; i < pageTxtSplit.length; i++) {
@@ -81,15 +85,46 @@ public class WordScraper extends Scraper{
         return true;
         }
         
+        public boolean insertStopWords(){
+                KeywordDB dbMethods = new KeywordDB();
+                if (!dbMethods.MakeDBConnection()){
+                    System.out.println("DB Connection Failes");
+                    return false;
+                }
+		//Read page for current url
+		if(!super.readWebPage()) {
+			System.out.println("Ooooopppppsssss! Couldn't read the web page");
+                        return false;
+		}
+		
+                //Parse web page into pageTxtSplit[]
+		Document doc = super.getPage();
+                String pageText = doc.select("table").text();
+		String[] pageTxtSplit = pageText.split("\\s+");
+                for(int i = 0; i < pageTxtSplit.length; i ++){
+                    if (pageTxtSplit[i].contains("'")){
+                        int length = pageTxtSplit[i].length();
+                        int aposLoc = pageTxtSplit[i].indexOf("'");
+                        pageTxtSplit[i] = pageTxtSplit[i].substring(0, aposLoc) + "'" + 
+                                            pageTxtSplit[i].substring(aposLoc, length);
+                        
+                    }
+                }
+                dbMethods.createStopWord(pageTxtSplit);
+            
+            return true;
+        }
+        
         
       public static void main(String[] args){
-            System.out.println("    ");
-          
-            WordScraper myScraper = new WordScraper("http://www.denvergov.org/apps4/subscriptions/subsc...");
-            if(myScraper.Scrape());
-            {
-                System.out.println("That worked");
-            }
+                WordScraper myScraper = new WordScraper(" ");
+                KeywordDB dbMethods = new KeywordDB();
+                dbMethods.MakeDBConnection();
+		//Read page for current url
+		if(!myScraper.readWebPage()) {
+			System.out.println("Ooooopppppsssss!");
+		}
+                        
         }
 }
 

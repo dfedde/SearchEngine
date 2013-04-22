@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -71,8 +73,12 @@ public class KeywordDB {
 	 */
 	public boolean createStopWord(String... word){
 		try{	
-                    for(int i = 0; i < word.length; i++){
-                        
+                    for(int i = 0; i < 544; i++){
+                    word[0] = "a";
+                    if (!searchStopwords(word[i])){
+                        //Already have this word
+                        continue;
+                    }
                     Statement stmt = Conn.createStatement();
 
                            String sqlStmt = "INSERT INTO Stop_Words (word) VALUES ('" + word[i] + "')";  
@@ -81,8 +87,9 @@ public class KeywordDB {
                    } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     // e.printStackTrace();
+                       return false;
                    }
-            return false;
+            return true;
 	}
 	/**
 	 * adds 1 or more link to database
@@ -144,7 +151,9 @@ public class KeywordDB {
                                             "' AND keyword = '"+ args[i][1] +"'";       
                         ResultSet result = stmt.executeQuery(sqlStatement);
                         if(!result.next()){
-                            wordsUniqueToDB.add(args[i][1]);
+                            if(searchStopwords(args[i][1])){
+                                wordsUniqueToDB.add(args[i][1]);
+                            }
                         }
                     }
                 } catch (SQLException e) {
@@ -222,12 +231,24 @@ public class KeywordDB {
 	 * @param args list of stopwords to search for
 	 * @return the remaing words that did not exist 
 	 */
-	public String[] searchStopwords(String... args){
-		return null;
+	public boolean searchStopwords(String... args){
+            boolean find = false;
+            try {
+                Statement stmt = Conn.createStatement();
+                String sqlStatement = "SELECT * FROM Stop_Words WHERE word = '" + args[0] + "'";       
+                ResultSet result = stmt.executeQuery(sqlStatement);
+                    if(!result.next()){
+                        find = true;
+                    }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(KeywordDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return find;
 	}
 	/**
-	 * deleat the inputed keywords
-	 * @param args list of keywords to be deleated by id 
+	 * delete the inputed keywords
+	 * @param args list of keywords to be deleted by id 
 	 * @return 
 	 */
 	public boolean deleteKeywords(String... args){

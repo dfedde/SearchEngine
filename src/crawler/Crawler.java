@@ -14,11 +14,8 @@ public class Crawler {
 	 * sets the link scraper to the net real page 
 	 */
 	public static void runLinkScraper(KeywordDB DB){
-                String test = DB.getLastLink(0);
-                System.out.println("LinkScraperLink:" + test);
-            
                 //set link to last array
-		LinkScraper links = new LinkScraper(test);
+		LinkScraper links = new LinkScraper(DB.getLastLink(0));
 		int counter = 1;
 		while(!links.Scrape()){
 			//set links to last array -1
@@ -30,19 +27,21 @@ public class Crawler {
 	 * sets the word scraper to the next real page 
 	 */
 	public static void runwordScraper(KeywordDB DB){
-                String test = DB.getFirstLink();
-                System.out.println("WordScraperLnik:" + test);
-		WordScraper words = new WordScraper(test);
+		WordScraper words = new WordScraper(DB.getFirstLink());
 		//set link = to first link with no date
 	
                 while(!words.Scrape()){
 			words.setUrl(DB.getFirstLink());
-                        
 			//set link to next array without a date
 		}
 	}
 	
 	public static void main(String... args){
+                boolean createStopWordsTable = false;
+                    if(createStopWordsTable){
+                        WordScraper createStopWordsDBTable = new WordScraper("https://dev.mysql.com/doc/refman/4.1/en/fulltext-stopwords.html");
+                        createStopWordsDBTable.insertStopWords();
+                    }
 		KeywordDB DB = new KeywordDB();
 		//TODO: add error protection
 		DB.MakeDBConnection();
@@ -50,7 +49,7 @@ public class Crawler {
 			runLinkScraper(DB);
 			runwordScraper(DB);
 		}
-	
+                System.out.println("Crawl Finished");
         }
 	
 }
